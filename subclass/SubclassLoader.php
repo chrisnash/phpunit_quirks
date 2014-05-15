@@ -26,22 +26,24 @@ class SubclassLoader {
 		// load the file... but instantiate the class no matter if it is new or not
 		$filename   = PHPUnit_Util_Fileloader::checkAndLoad($filename);
 	        $baseName   = str_replace('.php', '', basename($filename));
-		
-		$class = new ReflectionClass($baseName);
-            	if (!$class->isAbstract()) {
-                	if ($class->hasMethod(PHPUnit_Runner_BaseTestRunner::SUITE_METHODNAME)) {
-                    		$method = $class->getMethod(
-                      		PHPUnit_Runner_BaseTestRunner::SUITE_METHODNAME
-                    		);
 
-                    		if ($method->isStatic()) {
-                        		$suite->addTest($method->invoke(NULL, $className));
-                    		}
-                	}
-                	else if ($class->implementsInterface('PHPUnit_Framework_Test')) {
-                    		$suite->addTestSuite($class);
+		if ( class_exists( $baseName ) ) {		
+			$class = new ReflectionClass($baseName);
+            		if (!$class->isAbstract()) {
+                		if ($class->hasMethod(PHPUnit_Runner_BaseTestRunner::SUITE_METHODNAME)) {
+                    			$method = $class->getMethod(
+                  	    		PHPUnit_Runner_BaseTestRunner::SUITE_METHODNAME
+                    			);
+
+                    			if ($method->isStatic()) {
+                        			$suite->addTest($method->invoke(NULL, $className));
+                    			}
+                		}
+                		else if ($class->implementsInterface('PHPUnit_Framework_Test')) {
+                    			$suite->addTestSuite($class);
+            			}
             		}
-            	}
+		}
 	}
 
     	private static function toAbsolutePath($path, $useIncludePath = FALSE) {
