@@ -70,6 +70,6 @@ class SubclassLoader {
                 		$file = $includePathFile;
             		}
         	}
-		return $file;
+		return realpath( $file );
     	}
 }
