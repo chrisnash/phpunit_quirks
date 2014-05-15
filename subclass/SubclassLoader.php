@@ -27,7 +27,7 @@ class SubclassLoader {
 		$filename   = PHPUnit_Util_Fileloader::checkAndLoad($filename);
 	        $baseName   = str_replace('.php', '', basename($filename));
 
-		if ( class_exists( $baseName ) ) {		
+		if ( class_exists( $baseName, FALSE ) ) {		
 			$class = new ReflectionClass($baseName);
             		if (!$class->isAbstract()) {
                 		if ($class->hasMethod(PHPUnit_Runner_BaseTestRunner::SUITE_METHODNAME)) {
